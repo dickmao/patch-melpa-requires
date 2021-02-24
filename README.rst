@@ -1,7 +1,14 @@
 |build-status| |melpa-dev|
 
-Extract ``Version`` header for melpa directories when checking package
-dependencies.
+  A ball of mud approach to purging MELPA's original sin.
+
+``package-install`` generally will not update a bumped package dependency because
+MELPA's timestamp versioning is incompatible with the semantic versions
+specified in ``Package-Requires`` clauses.
+
+This package aims to Do The Right Thing.
+
+The details of the Schism are expatiated in uninteresting detail in `Issue 2944`_.
 
 .. |build-status|
    image:: https://github.com/dickmao/patch-melpa-requires/workflows/CI/badge.svg?branch=dev
@@ -27,6 +34,7 @@ Then
 
 Alternatively, copy ``patch-melpa-requires.el`` to a directory among ``C-h v RET load-path``.
 
-Add ``(require 'patch-melpa-requires)`` to ``.emacs``.
+Finally, add ``(require 'patch-melpa-requires)`` to ``.emacs``.
 
 .. _Getting started: http://melpa.org/#/getting-started
+.. _Issue 2944: https://github.com/melpa/melpa/issues/2944

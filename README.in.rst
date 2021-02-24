@@ -1,5 +1,7 @@
 |build-status| |melpa-dev|
 
+  A ball of mud approach to purging MELPA's original sin.
+
 .. COMMENTARY (see Makefile)
 
 .. |build-status|
@@ -26,6 +28,7 @@ Then
 
 Alternatively, copy ``patch-melpa-requires.el`` to a directory among ``C-h v RET load-path``.
 
-Add ``(require 'patch-melpa-requires)`` to ``.emacs``.
+Finally, add ``(require 'patch-melpa-requires)`` to ``.emacs``.
 
 .. _Getting started: http://melpa.org/#/getting-started
+.. _Issue 2944: https://github.com/melpa/melpa/issues/2944

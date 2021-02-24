@@ -51,7 +51,7 @@ dist: dist-clean
 .PHONY: install
 install: compile dist
 	$(EMACS) -Q --batch --eval "(package-initialize)" \
-	  --eval "(package-install-file \"dist/patch-melpa-requires-$(shell $(CASK) version).tar\")"
+	  --eval "(package-install-file \"dist/patch-melpa-requires-$(shell $(CASK) version).el\")"
 
 define SET_GITHUB_ACTOR =
 GITHUB_ACTOR := $(shell if [ -z ${GITHUB_ACTOR} ]; then git config user.name; else echo ${GITHUB_ACTOR} ; fi)
