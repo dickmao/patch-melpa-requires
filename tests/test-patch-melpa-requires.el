@@ -30,12 +30,31 @@
 ;;; Code:
 
 (require 'patch-melpa-requires)
+(require 'ert)
 
-(ert-deftest test-patch-melpa-requires ()
-  (should (package-installed-p 'ein))
-  (should (package-installed-p 'dash (version-to-list "2.17")))
-  (should-not (package-installed-p 'ein (version-to-list "20191221.21")))
-  (should-not (package-installed-p 'ein (version-to-list "0.18"))))
+(defun test-patch-melpa-requires--doit (advised-p)
+  (let* ((ansi (cadr (assq 'ansi package-alist)))
+         (reqs (package-desc-reqs ansi)))
+    (setf (alist-get 'dash reqs) (list (version-to-list "99.18")))
+    (condition-case err
+        (progn
+          (package-compute-transaction nil reqs)
+          (should-not advised-p))
+      (error (should (and advised-p
+                          (cl-search "Need package" (error-message-string err))))))))
+
+(ert-deftest package-installed-p-broken-inside-update ()
+  (unwind-protect
+      (progn
+        (advice-remove 'package-compute-transaction #'patch-melpa-requires)
+        (test-patch-melpa-requires--doit nil))
+    (advice-add 'package-compute-transaction :around #'patch-melpa-requires)))
+
+(ert-deftest package-installed-p-broken-outside-update ()
+  (should (package-installed-p 'dash (version-to-list "99.18"))))
+
+(ert-deftest package-installed-p-unbroken-inside-update ()
+  (test-patch-melpa-requires--doit t))
 
 (provide 'test-patch-melpa-requires)
 

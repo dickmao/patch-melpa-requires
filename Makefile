@@ -9,7 +9,7 @@ ELCTESTS = $(TESTSSRC:.el=.elc)
 
 .PHONY: test
 test: cask compile
-	$(CASK) emacs -Q --batch -L . -L tests -l test-patch-melpa-requires.el -f ert-run-tests-batch-and-exit
+	$(CASK) emacs -Q --batch -L . -L tests --eval "(setq package-user-dir \"$(CASK_DIR)\")" --eval "(package-initialize)" -l test-patch-melpa-requires.el -f ert-run-tests-batch-and-exit
 
 README.rst: README.in.rst patch-melpa-requires.el
 	grep ';;' patch-melpa-requires.el \
@@ -38,6 +38,7 @@ lint: compile
 .PHONY: clean
 clean:
 	$(CASK) clean-elc
+	rm -rf tests/test-install
 	rm -rf melpazoid-master/patch-melpa-requires
 
 .PHONY: dist-clean

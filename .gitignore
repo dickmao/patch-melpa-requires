@@ -1,4 +1,5 @@
 /.cask/
 *.elc
 dist
+tests/test-install
 melpazoid-master

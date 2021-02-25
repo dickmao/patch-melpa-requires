@@ -26,8 +26,8 @@
 ;;; Commentary:
 
 ;; ``package-install`` generally will not update a bumped package dependency because
-;; MELPA's timestamp versioning is incompatible with the semantic versions
-;; specified in ``Package-Requires`` clauses.
+;; MELPA's timestamp versioning is incompatible with the semantic version numbers
+;; in ``Package-Requires`` clauses (the Schism).
 ;;
 ;; This package aims to Do The Right Thing.
 ;;
@@ -36,6 +36,7 @@
 ;;; Code:
 
 (require 'package)
+(require 'subr-x)
 
 (defun patch-melpa-requires--dir-info ()
   "Snippet from `package-dir-info'.

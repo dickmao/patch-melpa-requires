@@ -18,9 +18,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, macos-latest]
         emacs_version: [25.3, 26.3, 27.1]
-        python_version: [3.7]
+        python version: [3.6]
 
     steps:
     - uses: actions/checkout@v1
@@ -39,6 +39,23 @@ jobs:
         echo "$HOME/local/cask/bin" >> $GITHUB_PATH
         echo "$HOME/.local/bin" >> $GITHUB_PATH
         echo "LD_LIBRARY_PATH=$HOME/.local/lib" >> $GITHUB_ENV
+
+    - uses: actions/cache@v1
+      if: startsWith(runner.os, 'Linux')
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-000
+
+    - uses: actions/cache@v1
+      with:
+        path: ~/melpazoid-master
+        key: melpazoid-000
+
+    - uses: actions/cache@v1
+      if: startsWith(runner.os, 'macOS')
+      with:
+        path: ~/Library/Caches/pip
+        key: ${{ runner.os }}-pip-000
 
     - uses: actions/cache@v1
       with:
@@ -65,6 +82,11 @@ jobs:
       if: startsWith(runner.os, 'macOS')
       run: brew list gnupg &>/dev/null || HOMEBREW_NO_AUTO_UPDATE=1 brew install gnupg
 
+    - name: dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install yq setuptools wheel
+
     - name: versions
       run: |
         curl --version
@@ -76,8 +98,18 @@ jobs:
         sh tools/install-cask.sh
         cask link list
 
-    - name: test
+    - name: lint
+      run: |
+        make lint
+      continue-on-error: ${{ matrix.emacs_version == 'snapshot' }}
+
+    - name: test-install
+      if: startsWith(runner.os, 'Linux')
       run: |
         make test-install
+      continue-on-error: ${{ matrix.emacs_version == 'snapshot' }}
+
+    - name: test
+      run: |
         make test
       continue-on-error: ${{ matrix.emacs_version == 'snapshot' }}
