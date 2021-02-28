@@ -7,9 +7,13 @@ TESTSSRC = $(shell ls tests/*.el)
 ELCTESTS = $(TESTSSRC:.el=.elc)
 .DEFAULT_GOAL := compile
 
+PHONY: autoloads
+autoloads:
+	$(EMACS) -Q --batch --eval "(package-initialize)" --eval "(package-generate-autoloads \"patch-melpa-requires\" \".\")"
+
 .PHONY: test
 test: cask compile
-	$(CASK) emacs -Q --batch -L . -L tests --eval "(setq package-user-dir \"$(CASK_DIR)\")" --eval "(package-initialize)" -l test-patch-melpa-requires.el -f ert-run-tests-batch-and-exit
+	$(CASK) emacs -Q --batch -L . -L tests --eval "(setq package-user-dir \"$(CASK_DIR)\")" --eval "(package-initialize)" -l test-patch-melpa-requires.el --eval "(patch-melpa-requires-activate)" -f ert-run-tests-batch-and-exit
 
 README.rst: README.in.rst patch-melpa-requires.el
 	grep ';;' patch-melpa-requires.el \
@@ -25,11 +29,12 @@ $(CASK_DIR): Cask
 	touch $(CASK_DIR)
 
 .PHONY: compile
-compile: cask
+compile: cask autoloads
 	! ($(CASK) eval \
 	      "(cl-letf (((symbol-function (quote cask-files)) (lambda (&rest _args) (mapcar (function symbol-name) (quote ($(TESTSSRC))))))) \
 	          (let ((byte-compile-error-on-warn t)) (cask-cli/build)))" 2>&1 | egrep -a "(Warning|Error):") ; (ret=$$? ; rm -f $(ELCTESTS) && exit $$ret)
 	! ($(CASK) eval "(let ((byte-compile-error-on-warn t)) (cask-cli/build))" 2>&1 | egrep -a "(Warning|Error):") ; (ret=$$? ; $(CASK) clean-elc && exit $$ret)
+	rm -f patch-melpa-requires-autoloads.el
 
 .PHONY: lint
 lint: compile
@@ -38,6 +43,7 @@ lint: compile
 .PHONY: clean
 clean:
 	$(CASK) clean-elc
+	rm -f *autoloads.el
 	rm -rf tests/test-install
 	rm -rf melpazoid-master/patch-melpa-requires
 
@@ -46,7 +52,7 @@ dist-clean:
 	rm -rf dist
 
 .PHONY: dist
-dist: dist-clean
+dist: dist-clean autoloads
 	$(CASK) package
 
 .PHONY: install

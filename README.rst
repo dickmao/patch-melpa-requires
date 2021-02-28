@@ -2,13 +2,23 @@
 
   A ball of mud approach to purging MELPA's original sin.
 
-``package-install`` generally will not update a bumped package dependency because
-MELPA's timestamp versioning is incompatible with the semantic version numbers
+This package aims to Do the Right Thing by advising ``package-installed-p``
+to disregard the MELPA-imposed version in ``PACKAGE-pkg.el``, and
+instead refer directly to the Version header in package source files.
+
+To ensure the user has acknowledged the risks of `Advising Functions`_, he
+must explicitly insert into his ``.emacs``:
+
+::
+
+(require 'patch-melpa-requires)
+(patch-melpa-requires-activate)
+
+Rationale: ``package-install`` generally will not update a bumped package dependency
+because MELPA's timestamp versioning is incompatible with the semantic version numbers
 in ``Package-Requires`` clauses (the Schism).
 
-This package aims to Do The Right Thing.
-
-The details of the Schism are expatiated in uninteresting detail in `Issue 2944`_.
+The particulars of the Schism are expatiated in uninteresting detail in `Issue 2944`_.
 
 .. |build-status|
    image:: https://github.com/dickmao/patch-melpa-requires/workflows/CI/badge.svg?branch=dev
@@ -40,3 +50,4 @@ Finally, add ``(require 'patch-melpa-requires)`` to ``.emacs``.
 
 .. _Getting started: http://melpa.org/#/getting-started
 .. _Issue 2944: https://github.com/melpa/melpa/issues/2944
+.. _Advising Functions: https://www.gnu.org/software/emacs/manual/html_node/elisp/Advising-Functions.html

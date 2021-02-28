@@ -34,3 +34,4 @@ Finally, add ``(require 'patch-melpa-requires)`` to ``.emacs``.
 
 .. _Getting started: http://melpa.org/#/getting-started
 .. _Issue 2944: https://github.com/melpa/melpa/issues/2944
+.. _Advising Functions: https://www.gnu.org/software/emacs/manual/html_node/elisp/Advising-Functions.html

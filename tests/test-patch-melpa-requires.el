@@ -46,9 +46,9 @@
 (ert-deftest package-installed-p-broken-inside-update ()
   (unwind-protect
       (progn
-        (advice-remove 'package-compute-transaction #'patch-melpa-requires)
+        (advice-remove 'package-compute-transaction #'patch-melpa-requires--advice)
         (test-patch-melpa-requires--doit nil))
-    (advice-add 'package-compute-transaction :around #'patch-melpa-requires)))
+    (patch-melpa-requires-activate)))
 
 (ert-deftest package-installed-p-broken-outside-update ()
   (should (package-installed-p 'dash (version-to-list "99.18"))))
