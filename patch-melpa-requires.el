@@ -34,7 +34,6 @@
 ;;
 ;; ::
 ;;
-;;     (require 'patch-melpa-requires)
 ;;     (patch-melpa-requires-activate)
 ;;
 ;; Rationale: ``package-install`` generally will not update a bumped package dependency
@@ -128,6 +127,7 @@ Override `package-installed-p' so querying versions of package descriptors in
 When running `package-compute-transaction', disregard the machine-generated version
 specified in PACKAGE-pkg.el, and instead look directly at the Version headers
 of source files."
+  (interactive)
   (condition-case err
       (progn (advice-remove 'package-compute-transaction
                             #'patch-melpa-requires--advice)

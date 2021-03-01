@@ -11,7 +11,6 @@ must explicitly insert into his ``.emacs``:
 
 ::
 
-(require 'patch-melpa-requires)
 (patch-melpa-requires-activate)
 
 Rationale: ``package-install`` generally will not update a bumped package dependency
