@@ -26,11 +26,7 @@ Then
    M-x package-refresh-contents RET
    M-x package-install RET patch-melpa-requires RET
 
-Alternatively, copy ``patch-melpa-requires.el`` to a directory among ``C-h v RET load-path``.
-
 Or, directly clone this repo and ``make install``.
-
-Finally, add ``(require 'patch-melpa-requires)`` to ``.emacs``.
 
 .. _Getting started: http://melpa.org/#/getting-started
 .. _Issue 2944: https://github.com/melpa/melpa/issues/2944

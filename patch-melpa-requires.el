@@ -124,9 +124,9 @@ Override `package-installed-p' so querying versions of package descriptors in
 ;;;###autoload
 (defun patch-melpa-requires-activate ()
   "Advise `package-installed-p' to refer to explicit Version headers.
-When running `package-compute-transaction', disregard the machine-generated version
-specified in PACKAGE-pkg.el, and instead look directly at the Version headers
-of source files."
+When running `package-compute-transaction', disregard the
+machine-generated version specified in PACKAGE-pkg.el, and instead
+look directly at the Version headers of source files."
   (interactive)
   (condition-case err
       (progn (advice-remove 'package-compute-transaction
