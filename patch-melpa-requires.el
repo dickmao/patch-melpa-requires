@@ -59,7 +59,7 @@ I considered advising `package-dir-info' but things are already too trick."
           (setq files nil)
           (setf (package-desc-kind info) 'dir))))
     (unless info
-      (error "No .el files with package headers in `%s'" default-directory))
+      (user-error "No .el files with package headers in `%s'" default-directory))
     info))
 
 (defun patch-melpa-requires--diagnostic ()
